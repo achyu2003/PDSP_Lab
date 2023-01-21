@@ -1,0 +1,99 @@
+#1. For periodic signal 
+
+clc; clear all; close all;
+%input the frequencies
+t=0:0.001:0.2;
+f1 = input ('Enter the input frequency1 = ');
+f2 = input ('Enter the input frequency2 = ');
+%input signal xa
+xa = cos(2*pi*f1*t) + cos(2*pi*f2*t);
+%the max frequency
+fm = max(f1,f2);
+% the sampling frequency is - 
+fs = 4*fm; 
+% For right sampling fs = 2*fm
+% For Over sampling fs > 2*fm so let fs=fm
+% For under sampling fs < 2*fm
+%calculate Ts
+ts = 1/fs;
+%sampling
+n=0.1:(0.2*fs);
+xd = cos(2*pi*f1*(n*ts)) + cos(2*pi*f2*(n*ts));
+figure;
+subplot(311);
+plot(t,xa);
+xlabel('t in s');
+ylabel('amp');
+title('Analog signal and Discrete signal')
+%legend('Continuous xa(t)', 'Discrete xd(n)');
+hold on;
+stem(n*ts,xd);
+hold off;
+legend('Continuous xa(t)', 'xd(n)');
+%plot only discrete
+subplot(312);
+stem(n,xd,'r');
+xlabel('n samples');
+ylabel('xd(n)');
+title('Discrete signal')
+%reconstruction by using the formula
+% xr(t) = sum over n=0.....N-1: x(nT)*sin(pi*(t-nT)/T)/(pi*(t-nT));
+% ==> sinc((t-nT)/T);
+%under-sampling
+xr = xd*sinc((t-(n'*ts))/ts);
+subplot(313);
+plot(t,xr);
+xlabel('t in s');
+ylabel('xr(t)');
+title('Over sampling');
+
+#2. For non-periodic
+
+%for aperiodic signal
+clc; clear all; close all;
+%input the frequencies
+t=0:0.001:0.2;
+f1 = input ('Enter the input frequency1 = ');
+f2 = input ('Enter the input frequency2 = ');
+%input signal xa
+xa = exp(2*pi*f1*t) + exp(2*pi*f2*t);
+%the max frequency
+fm = max(f1,f2);
+% the sampling frequency is - 
+fs = 2*fm; 
+% For right sampling fs = 2*fm
+% For Over sampling fs > 2*fm so let fs=fm
+% For under sampling fs < 2*fm
+%calculate Ts
+ts = 1/fs;
+%sampling
+n=0.1:(0.2*fs);
+xd = exp(2*pi*f1*(n*ts)) + exp(2*pi*f2*(n*ts));
+figure;
+subplot(311);
+plot(t,xa);
+xlabel('t in s');
+ylabel('amp');
+title('Analog signal and Discrete signal')
+%legend('Continuous xa(t)', 'Discrete xd(n)');
+hold on;
+stem(n*ts,xd);
+hold off;
+legend('Continuous xa(t)', 'xd(n)');
+%plot only discrete
+subplot(312);
+stem(n,xd,'r');
+xlabel('n samples');
+ylabel('xd(n)');
+title('Discrete signal')
+%reconstruction by using the formula
+% xr(t) = sum over n=0.....N-1: x(nT)*sin(pi*(t-nT)/T)/(pi*(t-nT));
+% ==> sinc((t-nT)/T);
+%right-sampling
+xr = xd*sinc((t-(n'*ts))/ts);
+subplot(313);
+plot(t,xr);
+xlabel('t in s');
+ylabel('xr(t)');
+title('Over sampling');
+
